@@ -3,22 +3,23 @@
 #include <algorithm>
 #include <numeric>
 #include <iomanip>
-#include <cstdlib> // For rand() and srand()
-#include <ctime>   // For time()
+#include <cstdlib> // rand, srand
+#include <ctime>   // time
+#include <fstream> // file input
 using namespace std;
 
 // ================= Person Class =================
 class Person {
-private:
+public:
     string firstName;
     string lastName;
     vector<int> homework;
     int exam;
-    double finalGrade;
+    double finalAverage;
+    double finalMedian;
 
-public:
     // Constructor
-    Person() : exam(0), finalGrade(0.0) {}
+    Person() : exam(0), finalAverage(0), finalMedian(0) {}
 
     // Copy constructor
     Person(const Person &other) {
@@ -26,7 +27,8 @@ public:
         lastName = other.lastName;
         homework = other.homework;
         exam = other.exam;
-        finalGrade = other.finalGrade;
+        finalAverage = other.finalAverage;
+        finalMedian = other.finalMedian;
     }
 
     // Assignment operator
@@ -36,7 +38,8 @@ public:
             lastName = other.lastName;
             homework = other.homework;
             exam = other.exam;
-            finalGrade = other.finalGrade;
+            finalAverage = other.finalAverage;
+            finalMedian = other.finalMedian;
         }
         return *this;
     }
@@ -44,46 +47,57 @@ public:
     // Destructor
     ~Person() {}
 
-    // Input method
-    friend istream &operator>>(istream &in, Person &p) {
+    // Input from user
+    void input() {
         cout << "Enter first name: ";
-        in >> p.firstName;
+        cin >> firstName;
         cout << "Enter last name: ";
-        in >> p.lastName;
+        cin >> lastName;
 
         cout << "Enter homework results (type -1 to finish): ";
         int score;
-        p.homework.clear();
-        while (in >> score && score != -1)
-            p.homework.push_back(score);
+        homework.clear();
+        while (cin >> score && score != -1)
+            homework.push_back(score);
 
         cout << "Enter exam result: ";
-        in >> p.exam;
-        return in;
+        cin >> exam;
     }
 
-    // Output method
-    friend ostream &operator<<(ostream &out, const Person &p) {
-        out << left << setw(12) << p.firstName
-            << left << setw(12) << p.lastName
-            << fixed << setprecision(2) << p.finalGrade;
-        return out;
+    // Generate random data
+    void generateRandom(int numHW) {
+        homework.clear();
+        for (int i = 0; i < numHW; ++i)
+            homework.push_back(rand() % 11); // 0-10
+        exam = rand() % 11;
     }
 
-    // Calculate average final grade
+    // Read from file
+    void readFromFile(istream &in, int numHW) {
+        in >> firstName >> lastName;
+        homework.clear();
+        int score;
+        for (int i = 0; i < numHW; ++i) {
+            in >> score;
+            homework.push_back(score);
+        }
+        in >> exam;
+    }
+
+    // Calculate average grade
     void calculateAverage() {
         if (homework.empty()) {
-            finalGrade = exam;
+            finalAverage = exam;
             return;
         }
         double avg = accumulate(homework.begin(), homework.end(), 0.0) / homework.size();
-        finalGrade = 0.4 * avg + 0.6 * exam;
+        finalAverage = 0.4 * avg + 0.6 * exam;
     }
 
-    // Calculate median final grade
+    // Calculate median grade
     void calculateMedian() {
         if (homework.empty()) {
-            finalGrade = exam;
+            finalMedian = exam;
             return;
         }
         sort(homework.begin(), homework.end());
@@ -93,68 +107,85 @@ public:
             median = (homework[n / 2 - 1] + homework[n / 2]) / 2.0;
         else
             median = homework[n / 2];
-        finalGrade = 0.4 * median + 0.6 * exam;
-    }
-
-    // Generate random homework and exam scores
-    void generateRandom(int numHW) {
-        homework.clear();
-        for (int i = 0; i < numHW; ++i)
-            homework.push_back(rand() % 11); // 0-10
-        exam = rand() % 11; // 0-10
+        finalMedian = 0.4 * median + 0.6 * exam;
     }
 };
 
 // ================= main() Function =================
 int main() {
-    srand(static_cast<unsigned>(time(0))); // Initialize random seed
+    srand(static_cast<unsigned>(time(0))); // random seed
 
-    int n;
-    cout << "Enter number of students: ";
-    cin >> n;
+    // Ask user: read from file or manual/random
+    char choice;
+    cout << "Do you want to read student data from Students.txt? (y/n): ";
+    cin >> choice;
 
-    vector<Person> students(n);
+    vector<Person> students;
+    int numHW = 5; // default number of homework assignments
 
-    // Ask if user wants random data
-    char randomChoice;
-    cout << "Do you want to generate random homework/exam scores? (y/n): ";
-    cin >> randomChoice;
+    if (choice == 'y' || choice == 'Y') {
+        ifstream fin("Students.txt");
+        if (!fin) {
+            cout << "Error opening Students.txt\n";
+            return 1;
+        }
 
-    // Input or generate data
-    for (int i = 0; i < n; ++i) {
-        cout << "\nStudent " << i + 1 << ":\n";
-        if (randomChoice == 'y' || randomChoice == 'Y') {
-            int numHW;
-            cout << "Enter number of homework assignments for random generation: ";
-            cin >> numHW;
-            students[i].generateRandom(numHW);
-            cout << "Random data generated for this student.\n";
-        } else {
-            cin >> students[i]; // manual input
+        // Read first line (header) to skip
+        string header;
+        getline(fin, header);
+
+        // Read student data
+        while (fin.peek() != EOF) {
+            Person temp;
+            temp.readFromFile(fin, numHW);
+            students.push_back(temp);
+        }
+        fin.close();
+        cout << "\nData loaded from Students.txt.\n";
+    } else {
+        int n;
+        cout << "Enter number of students: ";
+        cin >> n;
+
+        students.resize(n);
+
+        char randomChoice;
+        cout << "Do you want to generate random homework/exam scores? (y/n): ";
+        cin >> randomChoice;
+
+        for (int i = 0; i < n; ++i) {
+            cout << "\nStudent " << i + 1 << ":\n";
+            if (randomChoice == 'y' || randomChoice == 'Y') {
+                cout << "Enter number of homework assignments: ";
+                cin >> numHW;
+                students[i].generateRandom(numHW);
+                cout << "Random data generated.\n";
+            } else {
+                students[i].input();
+            }
         }
     }
 
-    // Choose calculation method
-    int method;
-    cout << "\nChoose final grade calculation method:\n";
-    cout << "1 - Average\n";
-    cout << "2 - Median\n";
-    cout << "Your choice: ";
-    cin >> method;
-
-    // Calculate final grades
+    // Calculate grades
     for (auto &s : students) {
-        if (method == 2)
-            s.calculateMedian();
-        else
-            s.calculateAverage();
+        s.calculateAverage();
+        s.calculateMedian();
     }
 
+    // Sort by first name (or surname)
+    sort(students.begin(), students.end(), [](const Person &a, const Person &b) {
+        return a.firstName < b.firstName;
+    });
+
     // Display results
-    cout << "\nName        Surname     Final Grade\n";
-    cout << "-----------------------------------\n";
-    for (auto &s : students)
-        cout << s << endl;
+    cout << "\nName        Surname     Final(Avg.)  Final(Med.)\n";
+    cout << "-----------------------------------------------\n";
+    for (auto &s : students) {
+        cout << left << setw(12) << s.firstName
+             << left << setw(12) << s.lastName
+             << fixed << setprecision(2) << setw(12) << s.finalAverage
+             << fixed << setprecision(2) << s.finalMedian << endl;
+    }
 
     return 0;
 }
