@@ -1,97 +1,202 @@
-Student Grades Processing System
+📘 Student Grades Processing System (C++)
 
-This project implements a full student grading system using C++, following the assignment requirements for v0.1, v0.2, and v0.25 releases.
+This repository contains a complete implementation of a student grade processing system in C++, following the assignment requirements for:
 
-📌 Version Overview
-✅ v0.1 – Initial Working Version
+v0.1 – Basic functionality
 
-Reads student records from a text file
+v0.2 – Full refactoring, file generation, sorting, splitting, timing
 
-Calculates final grades
+v0.25 – Performance comparison using vector, list, and deque
 
-Outputs sorted results
+🔖 Release Versions
+✅ v0.1 – Basic Implementation
 
-✅ v0.2 – Full Refactoring with Classes & Performance Measurement
+Reads student data from file
 
-This release includes major improvements required by the assignment:
+Stores students in vector<Student>
 
-✔ Refactored Structure
+Calculates final grade using:
 
-Code separated into classes:
+final = 0.3 * homework_avg + 0.7 * exam
 
-Student
 
-FileGenerator
+Outputs sorted students
 
-Processor
+No classes, no separate files yet
 
-Timer
+✅ v0.2 – Refactoring & Performance Measurement
 
-Each class has its own .h and .cpp files
+This version upgrades the project significantly:
 
-Clean, modular architecture
+✔ Code Refactoring
 
-✔ File Generation
+The project is separated into classes, each with its own .h and .cpp:
 
-Automatically generates files with:
+Student (data + grade calculation)
+
+FileGenerator (generates large test files)
+
+Processor (reading, sorting, splitting, saving)
+
+Timer (measures execution times)
+
+✔ Large Data File Generator
+
+Automatically generates:
 
 10,000 students
-
 100,000 students
-
 1,000,000 students
-
 10,000,000 students
 
-Using simple names like:
+
+Names use simple pattern:
 
 Name1 Surname1
 Name2 Surname2
 ...
 
-✔ Processing Features
+✔ Data Processing
 
-For any input file:
+For any input file, the program:
 
 Reads student records
 
-Calculates final scores
-
-Sorts students
+Sorts by final score
 
 Splits into:
 
-passed (final ≥ 5.0)
+passed → final ≥ 5.0
 
-failed (final < 5.0)
+failed → final < 5.0
 
-Outputs:
+Saves into:
 
 output/passed.txt
 output/failed.txt
 
-✔ Performance Measurement
+✔ Execution Time Measurement
 
-The program measures:
+The following times are recorded:
 
-File reading time
+Read time
 
-Sorting time
+Sort time
 
-Splitting time
+Split time
 
-Writing time
-
-(using a custom Timer class)
+Write time
 
 ✔ Exception Handling
 
-Handles errors such as:
+Missing file
 
-Missing input file
+Broken data
 
-Unable to create output file
+Output file errors
 
-Bad data format
+🟦 v0.25 – Vector, List & Deque Performance Comparison
 
-Keeps the program stable.
+This version includes three fully working implementations, each in its own folder:
+
+student-grades-v0.25-vector
+student-grades-v0.25-list
+student-grades-v0.25-deque
+
+✔ Implementations
+
+Each version uses the same logic but different STL containers:
+
+std::vector<Student>
+
+std::list<Student>
+
+std::deque<Student>
+
+✔ Tasks Perform in Each Version
+
+Read data
+
+Sort data
+
+Split passed/failed
+
+Write output
+
+Measure time for each step
+
+✔ Output
+
+All versions generate:
+
+output/passed.txt
+output/failed.txt
+
+✔ Intended Use
+
+Created for performance comparison between container types.
+
+📂 Project Structure
+src/
+│   Student.cpp / .h
+│   Processor.cpp / .h
+│   FileGenerator.cpp / .h
+│   Timer.cpp / .h
+│   main.cpp
+
+data/            (auto-generated files)
+output/          (auto-generated)
+
+v0.25-vector/    (vector implementation)
+v0.25-list/      (list implementation)
+v0.25-deque/     (deque implementation)
+
+▶ How to Run
+1. Generate Data
+
+Run program → choose:
+
+1
+
+
+This creates 10k–10M student files in /data.
+
+2. Process Data
+
+Run program → choose:
+
+2
+
+
+Enter:
+
+data/students_10000.txt
+
+
+Program prints:
+
+Read time
+
+Sort time
+
+Split time
+
+Write time
+
+Output file locations
+
+🏁 Final Notes
+
+This project completes all requirements for:
+
+v0.1
+
+v0.2
+
+v0.25
+
+with modular structure, performance measurement, exception handling, and STL container comparison.
+
+✍️ Author
+
+Hassan Jehangir
