@@ -1,202 +1,152 @@
-📘 Student Grades Processing System (C++)
+Student Grades Processing System – v1.0
 
-This repository contains a complete implementation of a student grade processing system in C++, following the assignment requirements for:
+This project processes large student datasets, calculates final results, and divides students into passed and failed categories using different containers (vector, list, deque) and two strategies.
+The goal is to measure execution performance, optimize using STL algorithms, and compare results.
 
-v0.1 – Basic functionality
+🚀 Features (v1.0)
 
-v0.2 – Full refactoring, file generation, sorting, splitting, timing
+Generate large data files (10k → 1M students)
 
-v0.25 – Performance comparison using vector, list, and deque
+Process using:
 
-🔖 Release Versions
-✅ v0.1 – Basic Implementation
+std::vector
 
-Reads student data from file
+std::list
 
-Stores students in vector<Student>
+std::deque
 
-Calculates final grade using:
+Two splitting strategies:
 
-final = 0.3 * homework_avg + 0.7 * exam
+Strategy 1: Copy students into passed and failed
 
+Strategy 2: Move failed students, keep only passed in original container
 
-Outputs sorted students
+Performance measurement (read, sort, split, write)
 
-No classes, no separate files yet
+Optimized using standard algorithms:
 
-✅ v0.2 – Refactoring & Performance Measurement
+std::copy, std::remove_if, std::partition, std::find_if, etc.
 
-This version upgrades the project significantly:
+📌 Releases Summary
+v0.1 – Initial Version
 
-✔ Code Refactoring
+Basic student reading
 
-The project is separated into classes, each with its own .h and .cpp:
+Simple grade calculations
 
-Student (data + grade calculation)
+No performance test
 
-FileGenerator (generates large test files)
+No splitting strategies
 
-Processor (reading, sorting, splitting, saving)
+v0.2 – File Generation + Processing
 
-Timer (measures execution times)
+Added automatic file generator (10k → 10M)
 
-✔ Large Data File Generator
+Processing with vector only
 
-Automatically generates:
+Split into passed/failed
 
-10,000 students
-100,000 students
-1,000,000 students
-10,000,000 students
+Basic timing
 
+v0.25 – Multiple Containers
 
-Names use simple pattern:
+Three versions:
 
-Name1 Surname1
-Name2 Surname2
-...
+vector
 
-✔ Data Processing
+list
 
-For any input file, the program:
+deque
 
-Reads student records
+Strategy 1 and Strategy 2 implemented
 
-Sorts by final score
+Manual performance comparison
 
-Splits into:
+v1.0 – Final Optimized Version (THIS RELEASE)
 
-passed → final ≥ 5.0
+One universal project
 
-failed → final < 5.0
+Container selection menu
 
-Saves into:
+Strategy selection menu
 
-output/passed.txt
-output/failed.txt
+Algorithm optimization using <algorithm>
 
-✔ Execution Time Measurement
+Full performance measurement
 
-The following times are recorded:
+Makefile + CMake support
 
-Read time
+Final documentation
+Performance Table (Your Measured Results)
+| **Container** | **Strategy** | **Read (ms)** | **Sort (ms)** | **Split (ms)** | **Write (ms)** | **Total Time (s)** |
+| ------------- | ------------ | ------------- | ------------- | -------------- | -------------- | ------------------ |
+| **vector**    | 1 (copy)     | 21.2883       | 15.5426       | 0              | 15.5812        | **164.238**        |
+| **vector**    | 2 (move)     | 27.0133       | 14.0596       | 4.9848         | 16.7062        | **25.425**         |
+| **list**      | 1 (copy)     | 31.1273       | 0             | 15.5807        | 15.6202        | **21.373**         |
+| **list**      | 2 (move)     | 24.1334       | 5.9852        | 0              | 15.6217        | **16.655**         |
+| **deque**     | 1 (copy)     | 31.1207       | 19.7868       | 2.9937         | 13.9638        | **6.395**          |
+| **deque**     | 2 (move)     | 21.7068       | 15.5813       | 0              | 15.6197        | **18.904**         |
 
-Sort time
+Conclusion:
+Based on the performance results:
 
-Split time
+Strategy 2 (remove + shrink) is faster for vector and list containers.
 
-Write time
+Strategy 1 is unexpectedly fast for deque, giving the best total time.
 
-✔ Exception Handling
+List sorting takes 0 ms because it uses efficient merge sort.
 
-Missing file
+Vector + Strategy 2 is the most stable and efficient overall.
 
-Broken data
+Deque + Strategy 1 achieved the best performance in your measurements.
 
-Output file errors
+Build Instructions
+Using Make (Unix / Linux / WSL):
+make
+./student-grades
 
-🟦 v0.25 – Vector, List & Deque Performance Comparison
+Using CMake (Windows/Linux/MacOS):
+mkdir build
+cd build
+cmake ..
+cmake --build .
 
-This version includes three fully working implementations, each in its own folder:
+Using Code::Blocks
 
-student-grades-v0.25-vector
-student-grades-v0.25-list
-student-grades-v0.25-deque
+Open student-grades-v1.0.cbp
 
-✔ Implementations
+Build & Run
 
-Each version uses the same logic but different STL containers:
+ Usage Guide
 
-std::vector<Student>
+Run program
 
-std::list<Student>
+Choose:
 
-std::deque<Student>
+1 – Generate data files
+2 – Process data file
 
-✔ Tasks Perform in Each Version
 
-Read data
-
-Sort data
-
-Split passed/failed
-
-Write output
-
-Measure time for each step
-
-✔ Output
-
-All versions generate:
-
-output/passed.txt
-output/failed.txt
-
-✔ Intended Use
-
-Created for performance comparison between container types.
-
-📂 Project Structure
-src/
-│   Student.cpp / .h
-│   Processor.cpp / .h
-│   FileGenerator.cpp / .h
-│   Timer.cpp / .h
-│   main.cpp
-
-data/            (auto-generated files)
-output/          (auto-generated)
-
-v0.25-vector/    (vector implementation)
-v0.25-list/      (list implementation)
-v0.25-deque/     (deque implementation)
-
-▶ How to Run
-1. Generate Data
-
-Run program → choose:
-
-1
-
-
-This creates 10k–10M student files in /data.
-
-2. Process Data
-
-Run program → choose:
-
-2
-
-
-Enter:
+Enter file path:
 
 data/students_10000.txt
 
 
-Program prints:
+Choose container:
 
-Read time
+1 – vector
+2 – list
+3 – deque
 
-Sort time
 
-Split time
+Choose strategy:
 
-Write time
+1 – copy into passed+failed
+2 – move failed, keep passed
 
-Output file locations
 
-🏁 Final Notes
+Output files created in:
 
-This project completes all requirements for:
+bin/Debug/output/passed.txt
+bin/Debug/output/failed.txt
 
-v0.1
-
-v0.2
-
-v0.25
-
-with modular structure, performance measurement, exception handling, and STL container comparison.
-
-✍️ Author
-
-Hassan Jehangir

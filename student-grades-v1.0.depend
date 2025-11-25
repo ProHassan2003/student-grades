@@ -1,0 +1,50 @@
+# depslib dependency file v1.0
+1763996991 source:e:\c++\assignment\student-grades-v1.0\src\filegenerator.cpp
+	"FileGenerator.h"
+	<fstream>
+	<iostream>
+	<stdexcept>
+	<random>
+
+1763996966 e:\c++\assignment\student-grades-v1.0\src\filegenerator.h
+	<string>
+
+1763995973 source:e:\c++\assignment\student-grades-v1.0\src\student.cpp
+	"Student.h"
+	<numeric>
+
+1763995926 e:\c++\assignment\student-grades-v1.0\src\student.h
+	<string>
+	<vector>
+
+1763997454 source:e:\c++\assignment\student-grades-v1.0\src\timer.cpp
+	"Timer.h"
+
+1763997410 e:\c++\assignment\student-grades-v1.0\src\timer.h
+	<chrono>
+
+1764075638 source:e:\c++\assignment\student-grades-v1.0\src\main.cpp
+	<iostream>
+	<string>
+	<vector>
+	<list>
+	<deque>
+	"FileGenerator.h"
+	"Processor.h"
+	"Timer.h"
+
+1764075560 e:\c++\assignment\student-grades-v1.0\src\processor.h
+	<string>
+	<vector>
+	<list>
+	<deque>
+	"Student.h"
+
+1764075590 source:e:\c++\assignment\student-grades-v1.0\src\processor.cpp
+	"Processor.h"
+	<fstream>
+	<sstream>
+	<stdexcept>
+	<algorithm>
+	<iostream>
+
